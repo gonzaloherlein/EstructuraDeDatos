@@ -267,10 +267,20 @@ class Lista:
       posHasta += 1
       nodoAux = nodoAux.siguiente
     return posHasta - 1
-
+  
+  def eliminarFinal(self,posicion):
+    if posicion > self.tamaño():
+      return self
+    nodoAux = self.__primero
+    posAux = 0
+    while nodoAux.tieneSiguiente() and posAux + 1 < posicion:
+      nodoAux = nodoAux.siguiente
+      posAux += 1
+    nodoAux.siguiente = None
   
 lista = Lista()
-lista.agregarAlFinal(7),lista.agregarAlFinal(2),lista.agregarAlFinal(3),lista.agregarAlFinal(4);
-lista.agregarAlFinal(1),lista.agregarAlFinal(6),lista.agregarAlFinal(8),lista.agregarAlFinal(9);
-lista.agregarAlFinal(10),lista.agregarAlFinal(2),lista.agregarAlFinal(4),lista.agregarAlFinal(1);
-print(lista.posicionCantImpares(6))
+lista.agregarAlFinal(3),lista.agregarAlFinal(5),lista.agregarAlFinal(8),lista.agregarAlFinal(2);
+lista.agregarAlFinal(6),lista.agregarAlFinal(7),lista.agregarAlFinal(5),lista.agregarAlFinal(8);
+lista.agregarAlFinal(2);
+lista.eliminarFinal(5)
+print(lista)
