@@ -138,3 +138,31 @@ class Diccionario: # principal
         #Si la materia no esta en el diccionario, agregarla con la nota actual
             diccionario[materia] = nota
     return diccionario
+  
+  def juntarPorValores(dic):
+    dicSalida = Diccionario()
+    for clave in dic.keys():
+      claveDicSalida = dic[clave]
+      if claveDicSalida not in dicSalida:
+        dicSalida[claveDicSalida] = [clave]
+      else:
+        dicSalida[claveDicSalida].append(clave)
+    return dicSalida
+  
+  def interseccion(dic1,dic2):
+    inter = Diccionario()
+    for clave in dic1.keys():
+      if clave in dic2.keys():
+        inter[clave] = (dic1[clave],dic2[clave])
+    return inter
+  
+  def maximoPorClave(dic1):
+    for clave in dic1.keys():
+      listaNumeros = dic1[clave]
+      dic1[clave] = max(listaNumeros)
+  
+dic1 = Diccionario()
+dic1.insert('casa',[8,2,12]),dic1.insert('perro',[4,1]),dic1.insert('auto',[2,9,8,3]);
+print(dic1)
+Diccionario.maximoPorClave(dic1)
+print(dic1)
