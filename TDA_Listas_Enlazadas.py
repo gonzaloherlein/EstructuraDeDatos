@@ -243,3 +243,34 @@ class Lista:
     else:
       self.agregarAlFinal(numero) # En el caso de que sea una lista vacia, lo agregamos
 
+  def cantidadDeImparesEnLista(self):
+    cantImpares = 0
+    if not self.estaVacia():
+      nodoAux = self.__primero
+      while nodoAux != None:
+        if not (nodoAux.dato % 2 == 0):
+          cantImpares += 1
+        nodoAux = nodoAux.siguiente
+    return cantImpares
+  
+  def esPar(num:int)->bool:
+    return num%2==0
+  
+  def posicionCantImpares(self,cantImpares):
+    posHasta = 0 
+    nodoAux = self.__primero
+    if self.cantidadDeImparesEnLista() < cantImpares:
+      return None
+    while nodoAux != None and cantImpares != 0:
+      if not (nodoAux.dato % 2 == 0):
+        cantImpares -= 1
+      posHasta += 1
+      nodoAux = nodoAux.siguiente
+    return posHasta - 1
+
+  
+lista = Lista()
+lista.agregarAlFinal(7),lista.agregarAlFinal(2),lista.agregarAlFinal(3),lista.agregarAlFinal(4);
+lista.agregarAlFinal(1),lista.agregarAlFinal(6),lista.agregarAlFinal(8),lista.agregarAlFinal(9);
+lista.agregarAlFinal(10),lista.agregarAlFinal(2),lista.agregarAlFinal(4),lista.agregarAlFinal(1);
+print(lista.posicionCantImpares(6))
