@@ -379,3 +379,62 @@ class ABB(ABB):
         cantNodos += 1
     return cantNodos
 
+class ABB(ABB):
+  #Elimina nodo que contiene al datoBuscado si esta en el ABB sino no hace nada
+  def eliminar(self, datoBuscado:int)->None:
+    if not self.estaVacio():
+      if self.__raiz.dato == datoBuscado:
+        nodoReemplazo = self.__raiz.eliminarNodoEncontrado()
+        self.__raiz = nodoReemplazo
+      else:
+        self.__raiz.eliminarNodo(datoBuscado)
+
+  class __NodoArbol(ABB.__NodoArbol):
+    #Retorna el predecesor o el sucesor del nodo que recibe como parametro o None si ambos no existen
+    def predecesorOsucesorNodo(self):#->__NodoArbol
+      nodoReemplazo = self.predecesorNodo()
+      if not nodoReemplazo:
+        nodoReemplazo = self.sucesorNodo()
+      return nodoReemplazo
+
+    #Busca datoBuscado en el ABB y retorna el nodo que contiene al dato, su nodo progenitor y de que lado esta
+    #Si el datoBuscado no esta en el ABB retorna los tres como None
+    def buscarProgenitorYlado(self, datoBuscado:int):#->tuple[__NodoArbol,__NodoArbol, str]
+      nodoProgenitor = None
+      nodoAeliminar = None
+      ladoNodoAeliminar = None
+      if datoBuscado < self.dato and self.tieneIzquierdo():
+        if datoBuscado == self.izquierdo.dato:
+          nodoProgenitor = self
+          nodoAeliminar = self.izquierdo
+          ladoNodoAeliminar = "izquierdo"
+        else:
+          nodoProgenitor, nodoAeliminar, ladoNodoAeliminar = self.izquierdo.buscarProgenitorYlado(datoBuscado)
+      elif datoBuscado > self.dato and self.tieneDerecho():
+        if datoBuscado == self.derecho.dato:
+          nodoProgenitor = self
+          nodoAeliminar = self.derecho
+          ladoNodoAeliminar = "derecho"
+        else:
+          nodoProgenitor, nodoAeliminar, ladoNodoAeliminar = self.derecho.buscarProgenitorYlado(datoBuscado)
+      return nodoProgenitor, nodoAeliminar, ladoNodoAeliminar
+
+    #Elimina el nodo buscado cuando ya fue encontrado y retorna su reemplazante o None si no tiene reemplazo posible
+    def eliminarNodoEncontrado(self):#->__NodoArbol
+      nodoReemplazo = self.predecesorOsucesorNodo()
+      if nodoReemplazo:
+        self.eliminarNodo(nodoReemplazo.dato)
+        nodoReemplazo.izquierdo = self.izquierdo
+        nodoReemplazo.derecho = self.derecho
+      return nodoReemplazo
+
+    #Busca y elimina el nodo que contiene al datoBuscado, si no lo encuentra no hace nada
+    def eliminarNodo(self, datoBuscado:int)->None:
+      nodoProgenitor, nodoAeliminar, ladoNodoAeliminar = self.buscarProgenitorYlado(datoBuscado)
+      if nodoProgenitor:
+        nodoReemplazo = nodoAeliminar.eliminarNodoEncontrado()
+        if ladoNodoAeliminar == "izquierdo":
+          nodoProgenitor.izquierdo = nodoReemplazo
+        else:
+          nodoProgenitor.derecho = nodoReemplazo
+
