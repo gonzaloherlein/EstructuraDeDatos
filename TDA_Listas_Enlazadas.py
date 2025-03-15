@@ -54,7 +54,7 @@ class Lista:
       elif posIns == 0:
         nodoNuevo.siguiente = self.__primero
         self.__primero = nodoNuevo
-      else: #Posicion de insercion mayor a cero en lista no vacia
+      else: #Posicion d1e insercion mayor a cero en lista no vacia
         nodoAux = self.__primero
         posAux = 0
         while posAux < posIns-1 and nodoAux.tieneSiguiente():
@@ -277,10 +277,95 @@ class Lista:
       nodoAux = nodoAux.siguiente
       posAux += 1
     nodoAux.siguiente = None
+
+  def eliminarSegmento(self,inicio:int, final:int):
+    nodoAux = self.__primero
+    posAux = 0
+    preNodo = None
+    if final > self.tamaño():
+      while nodoAux != None and posAux + 1 < inicio:
+        nodoAux = nodoAux.siguiente
+        posAux += 1
+      nodoAux.siguiente = None
+    else:
+      while nodoAux != None and posAux < inicio:
+        preNodo = nodoAux
+        nodoAux = nodoAux.siguiente
+        posAux += 1
+      posNodo = nodoAux
+      while posNodo != None and posAux <= final:
+        posNodo = posNodo.siguiente
+        posAux += 1
+      preNodo.siguiente = posNodo
+
+  def agregarAlFinalSinRepetidos(self,dato):
+      nodoNuevo = Lista.__NodoLista(dato)
+      if self.estaVacia():
+        self.__primero = nodoNuevo
+      else:
+        nodoAux = self.__primero
+        encontrado = False
+        while nodoAux.tieneSiguiente():
+          if nodoAux.dato == dato:
+            encontrado = True
+          nodoAux = nodoAux.siguiente
+        if nodoAux.dato == dato:
+          encontrado = True
+        if not encontrado:
+          nodoAux.siguiente = nodoNuevo
+          
+  def insertarSinRepetido(self,dato:any)->None:
+    nodoNuevo = Lista.__NodoLista(dato)
+    listaDeDatos = self.convertirListaEnArreglo()
+    if self.estaVacia():
+      self.__primero = nodoNuevo
+    else:
+      if nodoNuevo.dato not in listaDeDatos:
+        nodoAux = self.__primero
+        while nodoAux.tieneSiguiente():
+          nodoAux = nodoAux.siguiente
+        nodoAux.siguiente = nodoNuevo
+
+  def convertirListaEnArreglo(self):
+    listaDeSalida = []
+    if not self.estaVacia():
+      nodoAux = self.__primero
+      while nodoAux.tieneSiguiente():
+        listaDeSalida.append(nodoAux.dato)
+        nodoAux = nodoAux.siguiente
+      listaDeSalida.append(nodoAux.dato)
+    return listaDeSalida
+  
+  def sacarImpares(self):
+    if not self.estaVacia():
+      nodoAux = self.__primero
+      while nodoAux.tieneSiguiente():
+        if not (nodoAux.siguiente.dato % 2 == 0):
+          nodoAux.siguiente = nodoAux.siguiente.siguiente
+        else:
+          nodoAux = nodoAux.siguiente
+      
+  def insertarEnPosl(self,lista,posIns):
+    if posIns >= self.tamaño(): # En caso de poner una posIns mayor al tamaño, insertar al final
+      nodoAuxLista = lista.__primero
+      while nodoAuxLista.tieneSiguiente():
+        self.agregarAlFinal(nodoAuxLista.dato)
+        nodoAuxLista = nodoAuxLista.siguiente
+    else:
+      nodoAux = self.__primero
+      posAux = 0
+      while posAux < posIns - 1 and nodoAux.tieneSiguiente():
+        nodoAux = nodoAux.siguiente
+        posAux += 1
+      restoListaOriginal = nodoAux.siguiente # Guardo el resto de la lista
+      nodoAux.siguiente = lista.__primero # el siguiente del nodoAux va a ser la lista que paso por parametros
+      nodoUltimoInsert = lista.__primero # Inicializo otra variable para recorrer la lista parametrada
+      while nodoUltimoInsert.tieneSiguiente():
+        nodoUltimoInsert = nodoUltimoInsert.siguiente
+      nodoUltimoInsert.siguiente = restoListaOriginal #El siguiente del ultimo nodo de la lista parametrada va a ser el resto de la lista original
+    return self
   
 lista = Lista()
-lista.agregarAlFinal(3),lista.agregarAlFinal(5),lista.agregarAlFinal(8),lista.agregarAlFinal(2);
-lista.agregarAlFinal(6),lista.agregarAlFinal(7),lista.agregarAlFinal(5),lista.agregarAlFinal(8);
-lista.agregarAlFinal(2);
-lista.eliminarFinal(5)
+lista.agregarAlFinal(4),lista.agregarAlFinal(5),lista.agregarAlFinal(6),lista.agregarAlFinal(3),lista.agregarAlFinal(2),lista.agregarAlFinal(7);
+lista.sacarImpares()
 print(lista)
