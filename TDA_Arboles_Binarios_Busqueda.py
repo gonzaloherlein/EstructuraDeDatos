@@ -1,4 +1,4 @@
-import Digraph # type: ignore
+from graphviz import Digraph # type: ignore
 import copy as cp
 
 class ABB:
@@ -11,7 +11,7 @@ class ABB:
 
   def treePlot(self, fileName='arbol')->None:
     if not self.estaVacio():
-      treeDot = Digraph()
+      treeDot = DiGraph()
       treeDot.node(str(self.__raiz.dato), str(self.__raiz.dato))
       self.__raiz.treePlot(treeDot)
       treeDot.render(fileName, view=True)
@@ -438,3 +438,117 @@ class ABB(ABB):
         else:
           nodoProgenitor.derecho = nodoReemplazo
 
+class ABB(ABB):
+  def mayoresEnNivel(self,nivel,n)->int:
+    cantMayoresEnNivel = 0
+    if not self.estaVacio():
+      cantMayoresEnNivel = self.__raiz.mayoresEnNivelNodo(nivel,n)
+    return cantMayoresEnNivel
+  
+  class __NodoArbol(ABB.__NodoArbol):
+    def mayoresEnNivelNodo(self,nivel,n,nivelActual=0)->int:
+      cantMayoresEnNivel = 0
+      if nivelActual == nivel and self.dato > n:
+        cantMayoresEnNivel += 1
+      elif nivelActual < nivel:
+        if self.tieneIzquierdo():
+          cantMayoresEnNivel += self.izquierdo.mayoresEnNivelNodo(nivel,n,nivelActual+1)
+        if self.tieneDerecho():
+          cantMayoresEnNivel += self.derecho.mayoresEnNivelNodo(nivel,n,nivelActual+1)
+      return cantMayoresEnNivel
+
+
+#Ej 3 (TDA ABB)
+class ABB(ABB):
+  def padresOcupados(self)->int:
+    cantPadresOcupados = 0
+    if not self.estaVacio():
+      cantPadresOcupados += self.__raiz.padresOcupadosNodo()
+    return cantPadresOcupados
+  
+  class __NodoArbol(ABB.__NodoArbol):
+    def padresOcupadosNodo(self)->int:
+      cantPadresOcupados = 0
+      if self.grado() == 2:
+        cantPadresOcupados += 1
+      if self.tieneIzquierdo():
+        cantPadresOcupados += self.izquierdo.padresOcupadosNodo()
+      if self.tieneDerecho():
+        cantPadresOcupados += self.derecho.padresOcupadosNodo()
+      return cantPadresOcupados
+
+#Ej 4 (TDA ABB)
+class ABB(ABB):
+ def obtenerHermano(self, n):
+        if self.raiz is None:
+            return None
+
+        return self._obtenerHermano(n, self.raiz, None)
+
+ class __NodoArbol(ABB.__NodoArbol):
+    def _obtenerHermano(self, n, nodo, padre):
+        if nodo is None:
+            return None
+        
+        if nodo.dato == n:
+            if padre is None:
+                return None  # La raíz no tiene hermanos
+            
+            if padre.izq and padre.izq.dato == n:
+                if padre.der:
+                    return padre.der.dato
+                else:
+                    return None
+            elif padre.der and padre.der.dato == n:
+                if padre.izq:
+                    return padre.izq.dato
+                else:
+                    return None
+            
+        hermano_izq = self._obtenerHermano(n, nodo.izq, nodo)
+        if hermano_izq is not None:
+            return hermano_izq
+        
+        return self._obtenerHermano(n, nodo.der, nodo)
+
+#Ej 5 (TDA ABB)
+class ABB(ABB):
+  def sumaHojas(self)->list:
+    frontera = []
+    if not self.estaVacio():
+      self.__raiz.fronteraDeUnArbolNivelNodo(frontera)
+    return sum(frontera)
+
+  class __NodoArbol(ABB.__NodoArbol):
+    def fronteraDeUnArbolNivelNodo(self,frontera:list)->list:
+      if self.esHoja():
+        frontera.append(self.dato) #Si el nodo donde estoy parado es una HOJA, lo agrego a la lista de Frontera
+      if self.tieneIzquierdo():
+        self.izquierdo.fronteraDeUnArbolNivelNodo(frontera)
+      if self.tieneDerecho():
+        self.derecho.fronteraDeUnArbolNivelNodo(frontera)
+      return frontera
+    
+#Ej 6 (TDA ABB)
+class ABB(ABB):
+  def sumaHastaNivel(self,nivel)->int:
+    suma = 0
+    if not self.estaVacio():
+      suma += self.__raiz.sumaHastaNivelNodo(nivel)
+    return suma
+  
+  class __NodoArbol(ABB.__NodoArbol):
+    def sumaHastaNivelNodo(self,nivel,nivelActual = 0):
+      suma = 0
+      if nivelActual <= nivel:
+        suma += self.dato
+      if self.tieneIzquierdo():
+        suma += self.izquierdo.sumaHastaNivelNodo(nivel,nivelActual + 1)
+      if self.tieneDerecho():
+        suma += self.derecho.sumaHastaNivelNodo(nivel,nivelActual + 1)
+      return suma
+
+arbol1 = ABB()
+arbol1.insertar(8),arbol1.insertar(3),arbol1.insertar(10),arbol1.insertar(1);
+arbol1.insertar(14),arbol1.insertar(6),arbol1.insertar(4),arbol1.insertar(13);
+arbol1.insertar(7);
