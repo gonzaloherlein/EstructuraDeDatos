@@ -365,7 +365,20 @@ class Lista:
       nodoUltimoInsert.siguiente = restoListaOriginal #El siguiente del ultimo nodo de la lista parametrada va a ser el resto de la lista original
     return self
   
+  def duplicarElemento(self,dato:int)->None:
+    if not self.estaVacia():
+      nodoAux = self.__primero
+      while nodoAux != None:
+        if nodoAux.dato == dato:
+          nodoNuevo = self.__NodoLista(dato)
+          nodoAuxPost = nodoAux.siguiente
+          nodoNuevo.siguiente = nodoAuxPost
+          nodoAux.siguiente = nodoNuevo
+          nodoAux = nodoNuevo.siguiente
+        else:
+          nodoAux = nodoAux.siguiente
+  
 lista = Lista()
-lista.agregarAlFinal(4),lista.agregarAlFinal(5),lista.agregarAlFinal(6),lista.agregarAlFinal(3),lista.agregarAlFinal(2),lista.agregarAlFinal(7);
-lista.sacarImpares()
+lista.agregarAlFinal(4),lista.agregarAlFinal(5),lista.agregarAlFinal(4),lista.agregarAlFinal(2),lista.agregarAlFinal(4),lista.agregarAlFinal(8);
+lista.duplicarElemento(8)
 print(lista)

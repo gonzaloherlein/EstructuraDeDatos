@@ -1,5 +1,4 @@
 import copy as cp
-import numpy as np # type: ignore
 
 class Diccionario: # principal
   #######TDA tupla clave-significado#########################
@@ -161,8 +160,32 @@ class Diccionario: # principal
       listaNumeros = dic1[clave]
       dic1[clave] = max(listaNumeros)
   
-dic1 = Diccionario()
-dic1.insert('casa',[8,2,12]),dic1.insert('perro',[4,1]),dic1.insert('auto',[2,9,8,3]);
-print(dic1)
-Diccionario.maximoPorClave(dic1)
-print(dic1)
+  def posEnListas(lista1:list,lista2:list):
+    dicSalida = Diccionario()
+    for index in range(len(lista1)):
+      if lista1[index] in lista2:
+        if lista1[index] not in dicSalida:
+          dicSalida.insert(lista1[index],[index])
+        else:
+          dicSalida[lista1[index]].append(index)
+    for index in range(len(lista2)):
+       dicSalida[lista2[index]].append(index)
+    return dicSalida
+  
+  
+  def traduccion(listaMorse,significado,mensaje):
+    dic = Diccionario()
+    mensajeSalida = []
+    for index in range(len(listaMorse)):
+      dic.insert(listaMorse[index],significado[index])
+    for elemento in mensaje:
+      if elemento in dic:
+        mensajeSalida.append(dic[elemento])
+    return mensajeSalida
+    
+
+listaMorse = ['000','001','010','100','011','110','111','002']
+significado = ['k','r','c','d','e','o',' ','l']
+mensaje = ['011','002','111','001','110','010','000']
+mensajeSalida = Diccionario.traduccion(listaMorse,significado,mensaje)
+print(mensajeSalida)

@@ -548,7 +548,24 @@ class ABB(ABB):
         suma += self.derecho.sumaHastaNivelNodo(nivel,nivelActual + 1)
       return suma
 
+class ABB(ABB):
+  def estaCompleto(self:ABB):
+    if self.estaVacio():
+      return True
+    return self.__raiz.estaCompletoNodo()
+  
+  class __NodoArbol(ABB.__NodoArbol):
+    def estaCompletoNodo(self):
+      if self.esHoja():
+        return True
+      if self.tieneIzquierdo() and self.tieneDerecho():
+        return self.izquierdo.estaCompletoNodo() and self.derecho.estaCompletoNodo()
+      return False
+    
+    
 arbol1 = ABB()
 arbol1.insertar(8),arbol1.insertar(3),arbol1.insertar(10),arbol1.insertar(1);
 arbol1.insertar(14),arbol1.insertar(6),arbol1.insertar(4),arbol1.insertar(13);
-arbol1.insertar(7);
+arbol1.insertar(7),arbol1.insertar(20);
+
+print(arbol1.estaCompleto())

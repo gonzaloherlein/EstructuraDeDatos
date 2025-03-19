@@ -1,4 +1,4 @@
-arr1 = [5, 10, 24, 9, 8, 6, 21]
+arr1 = [5, 10,15]
 
 def tieneRepetidos(array):
     if len(array) <= 1:
@@ -90,6 +90,14 @@ def masParesQue10(arr1):
     cantPares = cantNumerosPares(arr1)
     cantMayoresADiez = cantNumerosMayoresADiez(arr1)
     return cantPares > cantMayoresADiez
-    
 
-print(masParesQue10(arr1))
+def sumNumbers(list):
+    # Caso base
+    sum = 0
+    if len(list) == 1:
+        return list[0]
+    if len(list) > 1:
+        sum = list[0] + sumNumbers(list[1:])
+    return sum 
+    
+print(sumNumbers(arr1))
